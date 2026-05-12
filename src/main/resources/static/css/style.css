@@ -1,0 +1,383 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #111827;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #111827;
+    color: white;
+    padding: 18px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar h2 {
+    margin: 0;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: bold;
+}
+
+.nav-menu a:hover {
+    color: #60a5fa;
+}
+
+/* Hero Section */
+.hero {
+    height: 520px;
+    background-image: url("/images/gym-hero.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-overlay {
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    padding-left: 70px;
+}
+
+.hero-content {
+    max-width: 600px;
+    color: white;
+}
+
+.hero-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero-content p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Buttons */
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 13px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #111827;
+}
+
+.btn-secondary:hover {
+    background-color: #e5e7eb;
+}
+
+/* Features */
+.features {
+    padding: 50px 70px;
+}
+
+.features h2 {
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+.feature-container {
+    display: flex;
+    gap: 25px;
+}
+
+.feature-card {
+    background-color: white;
+    padding: 25px;
+    flex: 1;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.feature-card h3 {
+    margin-top: 0;
+    color: #1f2937;
+}
+
+.feature-card p {
+    color: #4b5563;
+    line-height: 1.5;
+}
+.hero {
+    height: 520px;
+    background-image: url("/css/images/gym-hero.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Active Navbar */
+.nav-menu .active {
+    color: #60a5fa;
+}
+
+/* Page Container */
+.page-container {
+    padding: 45px 70px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 36px;
+    color: #111827;
+}
+
+.page-header p {
+    margin-top: 8px;
+    color: #6b7280;
+}
+
+/* Stats */
+.stats-container {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 35px;
+}
+
+.stat-card {
+    background-color: white;
+    flex: 1;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.stat-card h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #6b7280;
+}
+
+.stat-card p {
+    margin: 12px 0 0;
+    font-size: 32px;
+    font-weight: bold;
+    color: #111827;
+}
+
+/* Table Card */
+.table-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.table-header h2 {
+    margin: 0;
+}
+
+.search-box {
+    padding: 10px 14px;
+    width: 250px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+}
+
+.search-box:focus {
+    border-color: #2563eb;
+}
+
+/* Table */
+.member-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.member-table th,
+.member-table td {
+    text-align: left;
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.member-table th {
+    background-color: #f9fafb;
+    color: #374151;
+    font-size: 14px;
+}
+
+.member-table tr:hover {
+    background-color: #f9fafb;
+}
+
+/* Badge */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.active-badge {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.inactive-badge {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Action Button */
+.action-btn {
+    padding: 7px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    margin-right: 6px;
+}
+
+.edit-btn {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+
+.delete-btn {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.edit-btn:hover {
+    background-color: #bfdbfe;
+}
+
+.delete-btn:hover {
+    background-color: #fecaca;
+}
+/* Trainer Page */
+.trainer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.trainer-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.trainer-avatar {
+    width: 65px;
+    height: 65px;
+    background-color: #1f2937;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 18px;
+}
+
+.trainer-card h3 {
+    margin: 0;
+    color: #111827;
+}
+
+.trainer-role {
+    margin-top: 6px;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.trainer-info {
+    margin-top: 18px;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.trainer-info p {
+    margin: 8px 0;
+}
+
+.trainer-actions {
+    margin-top: 20px;
+}
+/* Form Page */
+.form-card {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 700px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #374151;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #2563eb;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}

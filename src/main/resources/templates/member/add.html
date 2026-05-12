@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Member - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+
+    <div class="nav-menu">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/members}" class="active">Members</a>
+        <a th:href="@{/trainers}">Trainers</a>
+    </div>
+</div>
+
+<section class="page-container">
+
+    <div class="page-header">
+        <div>
+            <h1>Add Member</h1>
+            <p>Tambahkan data member baru ke sistem FitManager.</p>
+        </div>
+
+        <a th:href="@{/members}" class="btn-secondary">Back</a>
+    </div>
+
+    <div class="form-card">
+        <form>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" placeholder="Enter member name">
+            </div>
+
+            <div class="form-group">
+                <label>Membership Type</label>
+                <select name="membership">
+                    <option value="">Select membership</option>
+                    <option value="Silver">Silver</option>
+                    <option value="Gold">Gold</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" name="phone" placeholder="Enter phone number">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter email address">
+            </div>
+
+            <div class="form-actions">
+                <a th:href="@{/members}" class="btn-secondary">Cancel</a>
+                <button type="button" class="btn-primary">Save Member</button>
+            </div>
+
+        </form>
+    </div>
+
+</section>
+
+</body>
+</html>

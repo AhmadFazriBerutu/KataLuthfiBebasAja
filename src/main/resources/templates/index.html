@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>FitManager Gym</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+
+    <div class="nav-menu">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/members}">Members</a>
+        <a th:href="@{/trainers}">Trainers</a>
+    </div>
+</div>
+
+<section class="hero">
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <h1>Manage Your Gym Smarter</h1>
+            <p>
+                FitManager membantu pengelolaan data member, trainer, dan aktivitas gym
+                menjadi lebih mudah, rapi, dan terorganisir.
+            </p>
+
+            <div class="hero-buttons">
+                <a th:href="@{/members}" class="btn-primary">Daftar Membership</a>
+                <a th:href="@{/members}" class="btn-secondary">Lihat Members</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <h2>Fitur Utama</h2>
+
+    <div class="feature-container">
+        <div class="feature-card">
+            <h3>Member Management</h3>
+            <p>Mengelola data member gym secara lebih mudah dan terstruktur.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Trainer Data</h3>
+            <p>Menyimpan dan menampilkan informasi trainer yang tersedia.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>Gym Activity</h3>
+            <p>Membantu admin dalam memantau aktivitas dan layanan gym.</p>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

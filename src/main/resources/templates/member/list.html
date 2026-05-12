@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Members - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+
+    <div class="nav-menu">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/members}" class="active">Members</a>
+        <a th:href="@{/trainers}">Trainers</a>
+    </div>
+</div>
+
+<section class="page-container">
+
+    <div class="page-header">
+        <div>
+            <h1>Members</h1>
+            <p>Kelola data member gym yang terdaftar di FitManager.</p>
+        </div>
+
+        <a th:href="@{/members/add}" class="btn-primary">+ Add Member</a>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Total Members</h3>
+            <p>120</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Active Members</h3>
+            <p>98</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Inactive Members</h3>
+            <p>22</p>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-header">
+            <h2>Member List</h2>
+            <input type="text" placeholder="Search member..." class="search-box">
+        </div>
+
+        <table class="member-table">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Membership</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>Andi Pratama</td>
+                <td>Gold</td>
+                <td><span class="badge active-badge">Active</span></td>
+                <td>
+                    <a href="#" class="action-btn edit-btn">Edit</a>
+                    <a href="#" class="action-btn delete-btn">Delete</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td>Siti Rahma</td>
+                <td>Silver</td>
+                <td><span class="badge active-badge">Active</span></td>
+                <td>
+                    <a href="#" class="action-btn edit-btn">Edit</a>
+                    <a href="#" class="action-btn delete-btn">Delete</a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>3</td>
+                <td>Budi Santoso</td>
+                <td>Basic</td>
+                <td><span class="badge inactive-badge">Inactive</span></td>
+                <td>
+                    <a href="#" class="action-btn edit-btn">Edit</a>
+                    <a href="#" class="action-btn delete-btn">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+</body>
+</html>
