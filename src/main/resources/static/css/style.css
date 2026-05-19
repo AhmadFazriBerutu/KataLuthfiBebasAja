@@ -1117,3 +1117,129 @@ body {
         max-width: 100%;
     }
 }
+
+/* Admin Dashboard */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 34px;
+}
+
+.dashboard-card {
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    border-radius: 28px;
+    background: rgba(15, 23, 42, 0.78);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.28);
+    transition: 0.25s ease;
+}
+
+.dashboard-card::after {
+    content: "";
+    position: absolute;
+    right: -45px;
+    top: -45px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: rgba(56, 189, 248, 0.14);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(56, 189, 248, 0.38);
+}
+
+.dashboard-label {
+    color: #94a3b8;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.dashboard-card h2 {
+    margin: 14px 0 8px;
+    font-size: 38px;
+    font-weight: 900;
+    color: #f8fafc;
+}
+
+.dashboard-card p {
+    margin: 0;
+    color: #94a3b8;
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 1.4fr 0.8fr;
+    gap: 28px;
+}
+
+.dashboard-panel {
+    padding: 28px;
+    border-radius: 28px;
+    background: rgba(15, 23, 42, 0.78);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.28);
+}
+
+.dashboard-panel h2 {
+    margin-top: 0;
+}
+
+.mini-link {
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 800;
+}
+
+.quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.quick-action {
+    display: block;
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(2, 6, 23, 0.42);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    text-decoration: none;
+    transition: 0.25s ease;
+}
+
+.quick-action:hover {
+    transform: translateY(-3px);
+    border-color: rgba(56, 189, 248, 0.35);
+    background: rgba(56, 189, 248, 0.08);
+}
+
+.quick-action strong {
+    display: block;
+    color: #f8fafc;
+    margin-bottom: 6px;
+}
+
+.quick-action span {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+@media (max-width: 1000px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}

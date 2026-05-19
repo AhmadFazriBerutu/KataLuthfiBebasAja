@@ -11,6 +11,11 @@ public class HomeController {
         return "index";
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "dashboard";
+    }
+
     @GetMapping("/members")
     public String members() {
         return "member/list";
