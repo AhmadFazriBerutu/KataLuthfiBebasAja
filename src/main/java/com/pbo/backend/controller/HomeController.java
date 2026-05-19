@@ -30,4 +30,9 @@ public class HomeController {
     public String addTrainer() {
         return "trainer/add";
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "auth/login";
+    }
 }

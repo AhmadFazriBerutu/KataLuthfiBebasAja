@@ -13,6 +13,7 @@
         <a th:href="@{/}">Home</a>
         <a th:href="@{/members}">Members</a>
         <a th:href="@{/trainers}">Trainers</a>
+        <a th:href="@{/login}">Login</a>
     </div>
 </div>
 
@@ -53,6 +54,51 @@
         </div>
     </div>
 </section>
+
+<section class="pricing-section">
+    <div class="section-header">
+        <h2>Membership Plans</h2>
+        <p>Pilih paket membership yang sesuai dengan kebutuhan latihan member.</p>
+    </div>
+
+    <div class="pricing-container">
+
+        <div class="pricing-card">
+            <h3>Silver</h3>
+            <p class="price">Rp150.000<span>/month</span></p>
+
+            <ul>
+                <li>Access to gym equipment</li>
+                <li>Basic workout area</li>
+                <li>Standard member support</li>
+                <li>Monthly membership</li>
+            </ul>
+
+            <a th:href="@{/members/add}" class="btn-secondary">Choose Silver</a>
+        </div>
+
+        <div class="pricing-card featured-plan">
+            <div class="popular-badge">Most Popular</div>
+
+            <h3>Gold</h3>
+            <p class="price">Rp250.000<span>/month</span></p>
+
+            <ul>
+                <li>Full access to gym facilities</li>
+                <li>Priority trainer consultation</li>
+                <li>Flexible workout schedule</li>
+                <li>Premium member support</li>
+            </ul>
+
+            <a th:href="@{/members/add}" class="btn-primary">Choose Gold</a>
+        </div>
+
+    </div>
+</section>
+
+<footer class="footer">
+    <p>© 2026 FitManager Gym. All rights reserved.</p>
+</footer>
 
 </body>
 </html>
