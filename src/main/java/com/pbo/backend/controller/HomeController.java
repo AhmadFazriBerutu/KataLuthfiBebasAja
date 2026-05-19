@@ -25,4 +25,9 @@ public class HomeController {
     public String trainers() {
         return "trainer/list";
     }
+
+    @GetMapping("/trainers/add")
+    public String addTrainer() {
+        return "trainer/add";
+    }
 }
