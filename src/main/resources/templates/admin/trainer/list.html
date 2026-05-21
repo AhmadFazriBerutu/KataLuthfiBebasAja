@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trainers - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+    <div class="nav-menu">
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <a th:href="@{/admin/members}">Members</a>
+        <a th:href="@{/admin/trainers}" class="active">Trainers</a>
+        <a th:href="@{/admin/requests}">PT Requests</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<section class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Trainers</h1>
+            <p>Kelola data trainer yang tersedia di FitManager Gym.</p>
+        </div>
+        <a th:href="@{/admin/trainers/add}" class="btn-primary">+ Add Trainer</a>
+    </div>
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Total Trainers</h3>
+            <p th:text="${trainers.size()}">0</p>
+        </div>
+    </div>
+    <div class="trainer-grid">
+        <div th:each="trainer : ${trainers}" class="trainer-card">
+            <div class="trainer-avatar" th:text="${#strings.substring(trainer.nama, 0, 2).toUpperCase()}">TR</div>
+            <h3 th:text="${trainer.nama}">Trainer Name</h3>
+            <p class="trainer-role" th:text="${trainer.spesialisasi}">Specialization</p>
+            <div class="trainer-info">
+                <p><strong>Email:</strong> <span th:text="${trainer.email}">-</span></p>
+                <p><strong>Phone:</strong> <span th:text="${trainer.telepon}">-</span></p>
+            </div>
+            <div class="trainer-actions">
+                <a th:href="@{/admin/trainers/delete/{id}(id=${trainer.id})}" class="action-btn delete-btn"
+                   onclick="return confirm('Hapus trainer ini?')">Delete</a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Members - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+    <div class="nav-menu">
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <a th:href="@{/admin/members}" class="active">Members</a>
+        <a th:href="@{/admin/trainers}">Trainers</a>
+        <a th:href="@{/admin/requests}">PT Requests</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<section class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Members</h1>
+            <p>Kelola data member gym yang terdaftar di FitManager.</p>
+        </div>
+        <a th:href="@{/admin/members/add}" class="btn-primary">+ Add Member</a>
+    </div>
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Total Members</h3>
+            <p th:text="${members.size()}">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Premium Members</h3>
+            <p>-</p>
+        </div>
+        <div class="stat-card">
+            <h3>Basic Members</h3>
+            <p>-</p>
+        </div>
+    </div>
+    <div class="table-card">
+        <div class="table-header">
+            <h2>Member List</h2>
+            <input type="text" placeholder="Search member..." class="search-box">
+        </div>
+        <table class="member-table">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Plan</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="member, stat : ${members}">
+                <td th:text="${stat.count}">1</td>
+                <td th:text="${member.nama}">Name</td>
+                <td th:text="${member.email}">email</td>
+                <td th:text="${member.telepon}">phone</td>
+                <td th:text="${member.paket}">Plan</td>
+                <td>
+                    <span th:class="${member.active} ? 'badge active-badge' : 'badge inactive-badge'"
+                          th:text="${member.active} ? 'Active' : 'Inactive'">Active</span>
+                </td>
+                <td>
+                    <a th:href="@{/admin/members/delete/{id}(id=${member.id})}" class="action-btn delete-btn"
+                       onclick="return confirm('Hapus member ini?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

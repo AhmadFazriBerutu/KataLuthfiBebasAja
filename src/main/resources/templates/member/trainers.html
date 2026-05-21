@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Trainers - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+    <div class="nav-menu">
+        <a th:href="@{/member/dashboard}">Dashboard</a>
+        <a th:href="@{/member/trainers}" class="active">Trainers</a>
+        <a th:href="@{/member/my-requests}">My Requests</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<section class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Trainers</h1>
+            <p>Lihat dan booking sesi dengan trainer pilihan kamu.</p>
+        </div>
+    </div>
+    <div th:if="${param.error}" style="color:#f87171;margin-bottom:20px;padding:16px;background:rgba(239,68,68,0.1);border-radius:16px;">
+        Hanya member Premium yang bisa booking sesi PT. Hubungi admin untuk upgrade paket.
+    </div>
+    <div class="trainer-grid">
+        <div th:each="trainer : ${trainers}" class="trainer-card">
+            <div class="trainer-avatar" th:text="${#strings.substring(trainer.nama, 0, 2).toUpperCase()}">TR</div>
+            <h3 th:text="${trainer.nama}">Trainer Name</h3>
+            <p class="trainer-role" th:text="${trainer.spesialisasi}">Specialization</p>
+            <div class="trainer-info">
+                <p><strong>Email:</strong> <span th:text="${trainer.email}">-</span></p>
+            </div>
+            <div class="trainer-actions" style="margin-top:20px">
+                <a th:if="${isPremium}" th:href="@{/member/trainers/{id}/schedules(id=${trainer.id})}" class="btn-primary" style="font-size:13px;padding:10px 16px;">
+                    Lihat Jadwal
+                </a>
+                <span th:unless="${isPremium}" style="color:#94a3b8;font-size:13px;">Upgrade Premium untuk booking</span>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

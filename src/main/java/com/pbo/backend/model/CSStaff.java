@@ -7,28 +7,19 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "members")
-public class Member extends Person {
+@Table(name = "cs_staff")
+public class CSStaff extends Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Paket paket;
-
-    private boolean isActive = true;
-
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public enum Paket {
-        BASIC, PREMIUM
-    }
-
     @Override
     public String getRole() {
-        return "MEMBER";
+        return "ADMIN";
     }
 }

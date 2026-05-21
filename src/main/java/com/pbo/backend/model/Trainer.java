@@ -3,32 +3,29 @@ package com.pbo.backend.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "members")
-public class Member extends Person {
+@Table(name = "trainers")
+public class Trainer extends Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private Paket paket;
-
-    private boolean isActive = true;
+    private String spesialisasi;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public enum Paket {
-        BASIC, PREMIUM
-    }
+    @OneToMany(mappedBy = "trainer", cascade = CascadeType.ALL)
+    private List<Schedule> schedules;
 
     @Override
     public String getRole() {
-        return "MEMBER";
+        return "PT";
     }
 }

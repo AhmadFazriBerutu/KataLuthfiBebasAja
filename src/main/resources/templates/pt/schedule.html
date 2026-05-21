@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Schedule - FitManager</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+  <h2>FitManager Gym</h2>
+  <div class="nav-menu">
+    <a th:href="@{/pt/dashboard}">Dashboard</a>
+    <a th:href="@{/pt/schedule}" class="active">Schedule</a>
+    <a th:href="@{/pt/members}">My Members</a>
+    <a th:href="@{/logout}">Logout</a>
+  </div>
+</div>
+<section class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>My Schedule</h1>
+      <p>Daftar jadwal sesi PT kamu.</p>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-header">
+      <h2>Schedule List</h2>
+    </div>
+    <table class="member-table">
+      <thead>
+      <tr>
+        <th>No</th>
+        <th>Hari</th>
+        <th>Jam Mulai</th>
+        <th>Jam Selesai</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="schedule, stat : ${schedules}">
+        <td th:text="${stat.count}">1</td>
+        <td th:text="${schedule.hari}">Senin</td>
+        <td th:text="${schedule.jamMulai}">08:00</td>
+        <td th:text="${schedule.jamSelesai}">09:00</td>
+        <td>
+                    <span th:class="${schedule.status.name() == 'AVAILABLE'} ? 'badge active-badge' : 'badge inactive-badge'"
+                          th:text="${schedule.status}">AVAILABLE</span>
+        </td>
+      </tr>
+      <tr th:if="${schedules.empty}">
+        <td colspan="5" style="text-align:center;color:#94a3b8;padding:30px">Tidak ada jadwal.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</body>
+</html>

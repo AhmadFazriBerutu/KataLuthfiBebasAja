@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Jadwal Trainer - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+    <div class="nav-menu">
+        <a th:href="@{/member/dashboard}">Dashboard</a>
+        <a th:href="@{/member/trainers}" class="active">Trainers</a>
+        <a th:href="@{/member/my-requests}">My Requests</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<section class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Jadwal <span th:text="${trainer.nama}">Trainer</span></h1>
+            <p>Pilih jadwal yang tersedia untuk booking sesi PT.</p>
+        </div>
+        <a th:href="@{/member/trainers}" class="btn-secondary">Back to Trainers</a>
+    </div>
+    <div class="table-card">
+        <div class="table-header">
+            <h2>Available Schedules</h2>
+        </div>
+        <table class="member-table">
+            <thead>
+            <tr>
+                <th>Hari</th>
+                <th>Jam Mulai</th>
+                <th>Jam Selesai</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="schedule : ${schedules}">
+                <td th:text="${schedule.hari}">Senin</td>
+                <td th:text="${schedule.jamMulai}">08:00</td>
+                <td th:text="${schedule.jamSelesai}">09:00</td>
+                <td><span class="badge active-badge">Available</span></td>
+                <td>
+                    <form th:action="@{/member/request-pt}" method="post" style="display:inline">
+                        <input type="hidden" name="trainerId" th:value="${trainer.id}">
+                        <input type="hidden" name="scheduleId" th:value="${schedule.id}">
+                        <button type="submit" class="action-btn edit-btn">Book</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${schedules.empty}">
+                <td colspan="5" style="text-align:center;color:#94a3b8;padding:30px">Tidak ada jadwal tersedia.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

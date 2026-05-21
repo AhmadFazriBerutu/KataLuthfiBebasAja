@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+    <div class="nav-menu">
+        <a th:href="@{/pt/dashboard}" class="active">Dashboard</a>
+        <a th:href="@{/pt/schedule}">Schedule</a>
+        <a th:href="@{/pt/members}">My Members</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<section class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Welcome, <span th:text="${trainer.nama}">Trainer</span>!</h1>
+            <p>Kelola jadwal dan member kamu di FitManager Gym.</p>
+        </div>
+    </div>
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <span class="dashboard-label">Specialization</span>
+            <h2 style="font-size:22px;margin-top:14px" th:text="${trainer.spesialisasi}">-</h2>
+            <p>Keahlian kamu</p>
+        </div>
+        <div class="dashboard-card">
+            <span class="dashboard-label">Total Schedules</span>
+            <h2 th:text="${schedules.size()}">0</h2>
+            <p>Jadwal terdaftar</p>
+        </div>
+        <div class="dashboard-card">
+            <span class="dashboard-label">Active Members</span>
+            <h2 th:text="${members.size()}">0</h2>
+            <p>Member yang di-approve</p>
+        </div>
+    </div>
+    <div class="dashboard-content">
+        <div class="dashboard-panel">
+            <h2>Quick Actions</h2>
+            <div class="quick-actions">
+                <a th:href="@{/pt/schedule}" class="quick-action">
+                    <strong>My Schedule</strong>
+                    <span>Lihat jadwal sesi PT kamu</span>
+                </a>
+                <a th:href="@{/pt/members}" class="quick-action">
+                    <strong>My Members</strong>
+                    <span>Lihat member yang booking sesi kamu</span>
+                </a>
+            </div>
+        </div>
+        <div class="dashboard-panel">
+            <h2>Info Trainer</h2>
+            <div class="trainer-info">
+                <p><strong>Nama:</strong> <span th:text="${trainer.nama}">-</span></p>
+                <p><strong>Email:</strong> <span th:text="${trainer.email}">-</span></p>
+                <p><strong>Telepon:</strong> <span th:text="${trainer.telepon}">-</span></p>
+                <p><strong>Spesialisasi:</strong> <span th:text="${trainer.spesialisasi}">-</span></p>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

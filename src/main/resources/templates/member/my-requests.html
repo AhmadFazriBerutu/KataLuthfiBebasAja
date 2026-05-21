@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Requests - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+    <div class="nav-menu">
+        <a th:href="@{/member/dashboard}">Dashboard</a>
+        <a th:href="@{/member/trainers}">Trainers</a>
+        <a th:href="@{/member/my-requests}" class="active">My Requests</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<section class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>My PT Requests</h1>
+            <p>Status permintaan sesi Personal Trainer kamu.</p>
+        </div>
+    </div>
+    <div class="table-card">
+        <div class="table-header">
+            <h2>Request History</h2>
+        </div>
+        <table class="member-table">
+            <thead>
+            <tr>
+                <th>No</th>
+                <th>Trainer</th>
+                <th>Hari</th>
+                <th>Jam</th>
+                <th>Status</th>
+                <th>Catatan CS</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="req, stat : ${requests}">
+                <td th:text="${stat.count}">1</td>
+                <td th:text="${req.trainer.nama}">Trainer</td>
+                <td th:text="${req.schedule.hari}">Senin</td>
+                <td th:text="${req.schedule.jamMulai} + ' - ' + ${req.schedule.jamSelesai}">08:00 - 09:00</td>
+                <td>
+                    <span th:class="${req.status.name() == 'APPROVED'} ? 'badge active-badge' :
+                                   (${req.status.name() == 'REJECTED'} ? 'badge inactive-badge' : 'badge')"
+                          th:style="${req.status.name() == 'PENDING'} ? 'background:rgba(56,189,248,0.15);color:#38bdf8' : ''"
+                          th:text="${req.status}">PENDING</span>
+                </td>
+                <td th:text="${req.catatanCs} ?: '-'">-</td>
+            </tr>
+            <tr th:if="${requests.empty}">
+                <td colspan="6" style="text-align:center;color:#94a3b8;padding:30px">Belum ada request PT.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

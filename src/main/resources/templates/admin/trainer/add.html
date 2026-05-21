@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Add Trainer - FitManager</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+  <h2>FitManager Gym</h2>
+  <div class="nav-menu">
+    <a th:href="@{/admin/dashboard}">Dashboard</a>
+    <a th:href="@{/admin/members}">Members</a>
+    <a th:href="@{/admin/trainers}" class="active">Trainers</a>
+    <a th:href="@{/admin/requests}">PT Requests</a>
+    <a th:href="@{/logout}">Logout</a>
+  </div>
+</div>
+<section class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Add Trainer</h1>
+      <p>Tambahkan data trainer baru yang tersedia di FitManager Gym.</p>
+    </div>
+    <a th:href="@{/admin/trainers}" class="btn-secondary">Back to Trainers</a>
+  </div>
+  <div class="form-layout">
+    <div class="form-main">
+      <div class="form-title">
+        <span class="form-icon">T</span>
+        <div>
+          <h2>Trainer Information</h2>
+          <p>Lengkapi profil trainer untuk ditampilkan pada sistem.</p>
+        </div>
+      </div>
+      <form th:action="@{/admin/trainers/save}" method="post" class="modern-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="nama" placeholder="Example: Siti Rahma" required>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="text" name="telepon" placeholder="Example: 08123456789">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="Example: trainer@email.com">
+        </div>
+        <div class="form-group">
+          <label>Specialization</label>
+          <select name="spesialisasi">
+            <option value="Weight Training">Weight Training</option>
+            <option value="Cardio Training">Cardio Training</option>
+            <option value="Yoga &amp; Flexibility">Yoga &amp; Flexibility</option>
+            <option value="Personal Training">Personal Training</option>
+            <option value="Cardio &amp; Weight Loss">Cardio &amp; Weight Loss</option>
+            <option value="Strength &amp; Muscle Building">Strength &amp; Muscle Building</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Username untuk login" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Password untuk login" required>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a th:href="@{/admin/trainers}" class="btn-secondary">Cancel</a>
+          <button type="submit" class="btn-primary">Save Trainer</button>
+        </div>
+      </form>
+    </div>
+    <div class="form-side">
+      <div class="side-card">
+        <h3>Trainer Categories</h3>
+        <p>Gunakan kategori agar trainer mudah dicari berdasarkan keahlian.</p>
+        <div class="plan-item">
+          <div><h4>Strength</h4><span>Weight and muscle training</span></div>
+          <strong>Gym</strong>
+        </div>
+        <div class="plan-item highlight">
+          <div><h4>Personal</h4><span>One-on-one training session</span></div>
+          <strong>Premium</strong>
+        </div>
+      </div>
+      <div class="side-card small">
+        <h3>Note</h3>
+        <p>Pastikan jadwal trainer jelas agar memudahkan pengelolaan layanan gym.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
