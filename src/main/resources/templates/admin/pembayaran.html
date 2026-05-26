@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Pembayaran - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .badge-lunas   { background: rgba(34,197,94,0.15);  color: #22c55e; border: 1px solid rgba(34,197,94,0.3);  padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+        .badge-pending { background: rgba(234,179,8,0.15);  color: #eab308; border: 1px solid rgba(234,179,8,0.3);  padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+        .badge-gagal   { background: rgba(239,68,68,0.15);  color: #ef4444; border: 1px solid rgba(239,68,68,0.3);  padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; }
+        .nominal-cell  { font-weight: 600; color: #f1f5f9; }
+        .empty-state   { text-align: center; padding: 48px 0; color: #64748b; }
+        .empty-state p { margin-top: 8px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+    <div class="nav-menu">
+        <a th:href="@{/admin/dashboard}">Dashboard</a>
+        <a th:href="@{/admin/members}">Members</a>
+        <a th:href="@{/admin/trainers}">Trainers</a>
+        <a th:href="@{/admin/requests}">PT Requests</a>
+        <a th:href="@{/admin/pembayaran}" class="active">Pembayaran</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+
+<section class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Riwayat Pembayaran</h1>
+            <p>Semua transaksi pembayaran paket Premium tercatat di sini.</p>
+        </div>
+    </div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Total Transaksi</h3>
+            <p th:text="${pembayaranList.size()}">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Lunas</h3>
+            <p th:text="${totalLunas}">0</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Pemasukan</h3>
+            <p th:text="'Rp ' + ${#numbers.formatInteger(totalPemasukan != null ? totalPemasukan : 0, 0, 'COMMA')}">Rp 0</p>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-header">
+            <h2>Daftar Pembayaran</h2>
+            <input type="text" id="searchInput" placeholder="Cari nama member..." class="search-box" onkeyup="filterTable()">
+        </div>
+
+        <div th:if="${!#lists.isEmpty(pembayaranList)}">
+            <table class="member-table" id="pembayaranTable">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Member</th>
+                    <th>Paket</th>
+                    <th>Metode</th>
+                    <th>Nominal</th>
+                    <th>Status</th>
+                    <th>Tanggal</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p, stat : ${pembayaranList}">
+                    <td th:text="${stat.count}">1</td>
+                    <td th:text="${p.member != null ? p.member.nama : 'Tanpa Nama'}">-</td>
+                    <td><span class="badge active-badge">PREMIUM</span></td>
+                    <td>
+                        <span th:if="${p.metode != null}" th:text="${p.metode.name() == 'CASH' ? '💵 Cash / Tunai' : (p.metode.name() == 'TRANSFER_BANK' ? '🏦 Transfer Bank' : '📱 QRIS / E-Wallet')}">-</span>
+                        <span th:if="${p.metode == null}" style="color:#64748b">-</span>
+                    </td>
+                    <td class="nominal-cell" th:text="'Rp ' + ${#numbers.formatInteger(p.nominal != null ? p.nominal : 0, 0, 'COMMA')}">Rp 0</td>
+                    <td>
+                        <span th:class="${p.status != null ? (p.status.name() == 'LUNAS' ? 'badge-lunas' : (p.status.name() == 'PENDING' ? 'badge-pending' : 'badge-gagal')) : 'badge-pending'}"
+                              th:text="${p.status != null ? p.status.name() : 'PENDING'}">LUNAS</span>
+                    </td>
+                    <td th:text="${p.tanggal != null ? #temporals.format(p.tanggal, 'dd MMM yyyy HH:mm') : '-'}">-</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${#lists.isEmpty(pembayaranList)}" class="empty-state">
+            <div style="font-size:2.5rem">💳</div>
+            <p>Belum ada data pembayaran.</p>
+            <p>Data akan muncul otomatis saat member Premium ditambahkan.</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    function filterTable() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('#pembayaranTable tbody tr');
+        rows.forEach(row => {
+            const nama = row.cells[1]?.textContent.toLowerCase() || '';
+            row.style.display = nama.includes(input) ? '' : 'none';
+        });
+    }
+</script>
+</body>
+</html>

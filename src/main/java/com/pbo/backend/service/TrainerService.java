@@ -3,8 +3,10 @@ package com.pbo.backend.service;
 import com.pbo.backend.model.Trainer;
 import com.pbo.backend.model.User;
 import com.pbo.backend.repository.TrainerRepository;
+import com.pbo.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,9 @@ public class TrainerService {
 
     @Autowired
     private TrainerRepository trainerRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Trainer> getAllTrainers() {
         return trainerRepository.findAll();
@@ -32,12 +37,18 @@ public class TrainerService {
     }
 
     public Trainer getTrainerByUsername(String username) {
-        return trainerRepository.findAll().stream()
-                .filter(t -> t.getUser() != null && t.getUser().getUsername().equals(username))
-                .findFirst().orElse(null);
+        return trainerRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Trainer tidak ditemukan dengan username: " + username));
     }
 
+    @Transactional
     public void deleteTrainer(Long id) {
-        trainerRepository.deleteById(id);
+        Trainer trainer = trainerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Trainer tidak ditemukan dengan id: " + id));
+        User user = trainer.getUser();
+        trainerRepository.delete(trainer);
+        if (user != null) {
+            userRepository.delete(user);
+        }
     }
 }

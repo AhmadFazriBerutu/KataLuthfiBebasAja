@@ -8,13 +8,11 @@
 
 <div class="navbar">
     <h2>FitManager Gym</h2>
-
     <div class="nav-menu">
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/dashboard}">Dashboard</a>
-        <a th:href="@{/members}">Members</a>
-        <a th:href="@{/trainers}" class="active">Trainers</a>
-        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/pt/dashboard}">Dashboard</a>
+        <a th:href="@{/pt/schedule}">Schedule</a>
+        <a th:href="@{/pt/members}">Members</a>
+        <a th:href="@{/logout}">Logout</a>
     </div>
 </div>
 
@@ -23,85 +21,31 @@
     <div class="page-header">
         <div>
             <h1>Trainers</h1>
-            <p>Kelola data trainer yang tersedia di FitManager Gym.</p>
+            <p>Daftar semua trainer yang terdaftar di FitManager Gym.</p>
         </div>
-
-        <a th:href="@{/trainers/add}" class="btn-primary">+ Add Trainer</a>
     </div>
 
     <div class="stats-container">
         <div class="stat-card">
             <h3>Total Trainers</h3>
-            <p>8</p>
-        </div>
-
-        <div class="stat-card">
-            <h3>Active Trainers</h3>
-            <p>6</p>
-        </div>
-
-        <div class="stat-card">
-            <h3>Available Today</h3>
-            <p>4</p>
+            <p th:text="${trainers.size()}">0</p>
         </div>
     </div>
 
     <div class="trainer-grid">
-
-        <div class="trainer-card">
-            <div class="trainer-avatar">AP</div>
-
-            <h3>Andi Pratama</h3>
-            <p class="trainer-role">Strength Trainer</p>
-
+        <div th:each="trainer : ${trainers}" class="trainer-card">
+            <div class="trainer-avatar"
+                 th:text="${#strings.length(trainer.nama) >= 2 ? #strings.substring(trainer.nama, 0, 2).toUpperCase() : trainer.nama.toUpperCase()}">TR</div>
+            <h3 th:text="${trainer.nama}">Trainer Name</h3>
+            <p class="trainer-role" th:text="${trainer.spesialisasi}">Specialization</p>
             <div class="trainer-info">
-                <p><strong>Specialization:</strong> Weight Training</p>
-                <p><strong>Schedule:</strong> Monday - Friday</p>
-                <p><strong>Status:</strong> <span class="badge active-badge">Active</span></p>
-            </div>
-
-            <div class="trainer-actions">
-                <a href="#" class="action-btn edit-btn">Edit</a>
-                <a href="#" class="action-btn delete-btn">Delete</a>
+                <p><strong>Email:</strong> <span th:text="${trainer.email}">-</span></p>
+                <p><strong>Phone:</strong> <span th:text="${trainer.telepon}">-</span></p>
             </div>
         </div>
-
-        <div class="trainer-card">
-            <div class="trainer-avatar">SR</div>
-
-            <h3>Siti Rahma</h3>
-            <p class="trainer-role">Yoga Instructor</p>
-
-            <div class="trainer-info">
-                <p><strong>Specialization:</strong> Yoga & Flexibility</p>
-                <p><strong>Schedule:</strong> Tuesday - Saturday</p>
-                <p><strong>Status:</strong> <span class="badge active-badge">Active</span></p>
-            </div>
-
-            <div class="trainer-actions">
-                <a href="#" class="action-btn edit-btn">Edit</a>
-                <a href="#" class="action-btn delete-btn">Delete</a>
-            </div>
-        </div>
-
-        <div class="trainer-card">
-            <div class="trainer-avatar">BS</div>
-
-            <h3>Budi Santoso</h3>
-            <p class="trainer-role">Cardio Coach</p>
-
-            <div class="trainer-info">
-                <p><strong>Specialization:</strong> Cardio Training</p>
-                <p><strong>Schedule:</strong> Weekend</p>
-                <p><strong>Status:</strong> <span class="badge inactive-badge">Inactive</span></p>
-            </div>
-
-            <div class="trainer-actions">
-                <a href="#" class="action-btn edit-btn">Edit</a>
-                <a href="#" class="action-btn delete-btn">Delete</a>
-            </div>
-        </div>
-
+        <tr th:if="${trainers.empty}">
+            <td colspan="4" style="text-align:center;color:#94a3b8;padding:30px">Belum ada trainer terdaftar.</td>
+        </tr>
     </div>
 
 </section>

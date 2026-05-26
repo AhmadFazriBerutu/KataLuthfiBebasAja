@@ -8,13 +8,11 @@
 
 <div class="navbar">
     <h2>FitManager Gym</h2>
-
     <div class="nav-menu">
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/dashboard}">Dashboard</a>
-        <a th:href="@{/members}" class="active">Members</a>
-        <a th:href="@{/trainers}">Trainers</a>
-        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/member/dashboard}">Dashboard</a>
+        <a th:href="@{/member/trainers}">Trainers</a>
+        <a th:href="@{/member/my-requests}">My Requests</a>
+        <a th:href="@{/logout}">Logout</a>
     </div>
 </div>
 
@@ -23,26 +21,22 @@
     <div class="page-header">
         <div>
             <h1>Members</h1>
-            <p>Kelola data member gym yang terdaftar di FitManager.</p>
+            <p>Daftar member yang terdaftar di FitManager Gym.</p>
         </div>
-
-        <a th:href="@{/members/add}" class="btn-primary">+ Add Member</a>
     </div>
 
     <div class="stats-container">
         <div class="stat-card">
             <h3>Total Members</h3>
-            <p>120</p>
+            <p th:text="${members.size()}">0</p>
         </div>
-
         <div class="stat-card">
             <h3>Active Members</h3>
-            <p>98</p>
+            <p th:text="${totalActive}">0</p>
         </div>
-
         <div class="stat-card">
             <h3>Inactive Members</h3>
-            <p>22</p>
+            <p th:text="${totalInactive}">0</p>
         </div>
     </div>
 
@@ -51,50 +45,31 @@
             <h2>Member List</h2>
             <input type="text" placeholder="Search member..." class="search-box">
         </div>
-
         <table class="member-table">
             <thead>
             <tr>
                 <th>No</th>
                 <th>Name</th>
-                <th>Membership</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Plan</th>
                 <th>Status</th>
-                <th>Action</th>
             </tr>
             </thead>
-
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>Andi Pratama</td>
-                <td>Gold</td>
-                <td><span class="badge active-badge">Active</span></td>
+            <tr th:each="member, stat : ${members}">
+                <td th:text="${stat.count}">1</td>
+                <td th:text="${member.nama}">Name</td>
+                <td th:text="${member.email}">email</td>
+                <td th:text="${member.telepon}">phone</td>
+                <td th:text="${member.paket}">Plan</td>
                 <td>
-                    <a href="#" class="action-btn edit-btn">Edit</a>
-                    <a href="#" class="action-btn delete-btn">Delete</a>
+                    <span th:class="${member.active} ? 'badge active-badge' : 'badge inactive-badge'"
+                          th:text="${member.active} ? 'Active' : 'Inactive'">Active</span>
                 </td>
             </tr>
-
-            <tr>
-                <td>2</td>
-                <td>Siti Rahma</td>
-                <td>Silver</td>
-                <td><span class="badge active-badge">Active</span></td>
-                <td>
-                    <a href="#" class="action-btn edit-btn">Edit</a>
-                    <a href="#" class="action-btn delete-btn">Delete</a>
-                </td>
-            </tr>
-
-            <tr>
-                <td>3</td>
-                <td>Budi Santoso</td>
-                <td>Basic</td>
-                <td><span class="badge inactive-badge">Inactive</span></td>
-                <td>
-                    <a href="#" class="action-btn edit-btn">Edit</a>
-                    <a href="#" class="action-btn delete-btn">Delete</a>
-                </td>
+            <tr th:if="${members.empty}">
+                <td colspan="6" style="text-align:center;color:#94a3b8;padding:30px">Belum ada member terdaftar.</td>
             </tr>
             </tbody>
         </table>

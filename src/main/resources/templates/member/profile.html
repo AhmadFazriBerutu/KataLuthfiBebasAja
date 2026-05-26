@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Profil - FitManager</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+    <h2>FitManager Gym</h2>
+    <div class="nav-menu">
+        <a th:href="@{/member/dashboard}">Dashboard</a>
+        <a th:href="@{/member/trainers}">Trainers</a>
+        <a th:href="@{/member/my-requests}">My Requests</a>
+        <a th:href="@{/member/profile}" class="active">Profil</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<section class="page-container">
+    <div class="page-header">
+        <div>
+            <h1>Edit Profil</h1>
+            <p>Perbarui informasi akun kamu di sini.</p>
+        </div>
+    </div>
+
+    <!-- Notifikasi sukses -->
+    <div th:if="${param.success}" class="alert alert-success"
+         style="background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;padding:12px 18px;border-radius:8px;margin-bottom:20px;">
+        Profil berhasil diperbarui!
+    </div>
+
+    <div class="dashboard-content">
+        <div class="dashboard-panel">
+            <h2>Informasi Pribadi</h2>
+            <form th:action="@{/member/profile/update}" method="post" th:object="${member}">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" th:field="*{nama}" class="form-control" placeholder="Nama lengkap" required />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" th:field="*{email}" class="form-control" placeholder="Email" required />
+                </div>
+                <div class="form-group">
+                    <label>Telepon</label>
+                    <input type="text" th:field="*{telepon}" class="form-control" placeholder="Nomor telepon" />
+                </div>
+                <div class="form-group">
+                    <label>Paket</label>
+                    <input type="text" th:value="${member.paket}" class="form-control" readonly
+                           style="background:#f3f4f6;cursor:not-allowed;" />
+                    <small style="color:#6b7280;">Paket tidak dapat diubah melalui halaman ini.</small>
+                </div>
+                <div style="margin-top:20px;display:flex;gap:12px;">
+                    <button type="submit" class="btn-primary">Simpan Perubahan</button>
+                    <a th:href="@{/member/dashboard}" class="action-btn edit-btn">Batal</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

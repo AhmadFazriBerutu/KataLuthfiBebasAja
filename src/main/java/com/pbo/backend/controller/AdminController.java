@@ -1,12 +1,15 @@
 package com.pbo.backend.controller;
 
 import com.pbo.backend.model.*;
+import com.pbo.backend.repository.UserRepository;
 import com.pbo.backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -22,7 +25,13 @@ public class AdminController {
     private PTRequestService ptRequestService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private PembayaranService pembayaranService;
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
@@ -35,7 +44,10 @@ public class AdminController {
     // === MEMBER ===
     @GetMapping("/members")
     public String members(Model model) {
-        model.addAttribute("members", memberService.getAllMembers());
+        var members = memberService.getAllMembers();
+        model.addAttribute("members", members);
+        model.addAttribute("totalPremium", members.stream().filter(m -> m.getPaket() == Member.Paket.PREMIUM).count());
+        model.addAttribute("totalBasic", members.stream().filter(m -> m.getPaket() == Member.Paket.BASIC).count());
         return "admin/member/list";
     }
 
@@ -48,23 +60,68 @@ public class AdminController {
     @PostMapping("/members/save")
     public String saveMember(@ModelAttribute Member member,
                              @RequestParam String username,
-                             @RequestParam String password) {
+                             @RequestParam String password,
+                             @RequestParam(required = false) String metodePembayaran,
+                             @RequestParam(required = false) Double nominal,
+                             Model model) {
+        // 1. Validasi Duplikat Username
+        if (userRepository.findByUsername(username).isPresent()) {
+            model.addAttribute("member", member);
+            model.addAttribute("errorUsername", "Username '" + username + "' sudah digunakan. Pilih username lain.");
+            return "admin/member/add";
+        }
+
+        // 2. Buat dan SAVE User terlebih dahulu untuk menghindari TransientPropertyValueException
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(User.Role.MEMBER);
-        member.setUser(user);
+        User savedUser = userRepository.save(user); // Mencegah error transient object
+
+        // 3. Pasang User yang sudah memiliki ID ke objek Member, lalu simpan
+        member.setUser(savedUser);
+        Member savedMember = memberService.saveMember(member);
+
+        // 4. Simpan data pembayaran jika paket PREMIUM
+        if (savedMember.getPaket() == Member.Paket.PREMIUM) {
+            pembayaranService.buatPembayaran(savedMember, metodePembayaran, nominal);
+        }
+
+        return "redirect:/admin/members";
+    }
+
+    @GetMapping("/members/edit/{id}")
+    public String editMemberForm(@PathVariable Long id, Model model) {
+        Member member = memberService.getMemberById(id).orElseThrow();
+        model.addAttribute("member", member);
+        return "admin/member/edit";
+    }
+
+    @PostMapping("/members/update/{id}")
+    public String updateMember(@PathVariable Long id,
+                               @ModelAttribute Member form,
+                               @RequestParam String username,
+                               Model model) {
+        Member member = memberService.getMemberById(id).orElseThrow();
+        Optional<User> existing = userRepository.findByUsername(username);
+        if (existing.isPresent() && !existing.get().getId().equals(member.getUser().getId())) {
+            model.addAttribute("member", member);
+            model.addAttribute("errorUsername", "Username '" + username + "' sudah digunakan. Pilih username lain.");
+            return "admin/member/edit";
+        }
+        member.setNama(form.getNama());
+        member.setEmail(form.getEmail());
+        member.setTelepon(form.getTelepon());
+        member.setPaket(form.getPaket());
+        member.getUser().setUsername(username);
+
+        // Pastikan cascade/update user berjalan aman
+        userRepository.save(member.getUser());
         memberService.saveMember(member);
         return "redirect:/admin/members";
     }
 
-    @GetMapping("/members/delete/{id}")
-    public String deleteMember(@PathVariable Long id) {
-        memberService.deleteMember(id);
-        return "redirect:/admin/members";
-    }
-
-    // === TRAINER ===
+    // === PT REQUESTS ===
     @GetMapping("/trainers")
     public String trainers(Model model) {
         model.addAttribute("trainers", trainerService.getAllTrainers());
@@ -80,19 +137,53 @@ public class AdminController {
     @PostMapping("/trainers/save")
     public String saveTrainer(@ModelAttribute Trainer trainer,
                               @RequestParam String username,
-                              @RequestParam String password) {
+                              @RequestParam String password,
+                              Model model) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            model.addAttribute("trainer", trainer);
+            model.addAttribute("errorUsername", "Username '" + username + "' sudah digunakan. Pilih username lain.");
+            return "admin/trainer/add";
+        }
+
+        // Buat dan SAVE User terlebih dahulu untuk menghindari TransientPropertyValueException
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(User.Role.PT);
-        trainer.setUser(user);
+        User savedUser = userRepository.save(user); // Mencegah error transient object
+
+        trainer.setUser(savedUser);
         trainerService.saveTrainer(trainer);
         return "redirect:/admin/trainers";
     }
 
-    @GetMapping("/trainers/delete/{id}")
-    public String deleteTrainer(@PathVariable Long id) {
-        trainerService.deleteTrainer(id);
+    @GetMapping("/trainers/edit/{id}")
+    public String editTrainerForm(@PathVariable Long id, Model model) {
+        Trainer trainer = trainerService.getTrainerById(id).orElseThrow();
+        model.addAttribute("trainer", trainer);
+        return "admin/trainer/edit";
+    }
+
+    @PostMapping("/trainers/update/{id}")
+    public String updateTrainer(@PathVariable Long id,
+                                @ModelAttribute Trainer form,
+                                @RequestParam String username,
+                                Model model) {
+        Trainer trainer = trainerService.getTrainerById(id).orElseThrow();
+        Optional<User> existing = userRepository.findByUsername(username);
+        if (existing.isPresent() && !existing.get().getId().equals(trainer.getUser().getId())) {
+            model.addAttribute("trainer", trainer);
+            model.addAttribute("errorUsername", "Username '" + username + "' sudah digunakan. Pilih username lain.");
+            return "admin/trainer/edit";
+        }
+        trainer.setNama(form.getNama());
+        trainer.setEmail(form.getEmail());
+        trainer.setTelepon(form.getTelepon());
+        trainer.setSpesialisasi(form.getSpesialisasi());
+        trainer.getUser().setUsername(username);
+
+        userRepository.save(trainer.getUser());
+        trainerService.saveTrainer(trainer);
         return "redirect:/admin/trainers";
     }
 
@@ -105,8 +196,13 @@ public class AdminController {
 
     @PostMapping("/requests/approve/{id}")
     public String approveRequest(@PathVariable Long id,
-                                 @RequestParam(required = false) String catatan) {
-        ptRequestService.approveRequest(id, catatan);
+                                 @RequestParam(required = false) String catatan,
+                                 org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttrs) {
+        try {
+            ptRequestService.approveRequest(id, catatan);
+        } catch (IllegalStateException e) {
+            redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/admin/requests";
     }
 
@@ -115,5 +211,34 @@ public class AdminController {
                                 @RequestParam(required = false) String catatan) {
         ptRequestService.rejectRequest(id, catatan);
         return "redirect:/admin/requests";
+    }
+
+    @PostMapping("/members/delete/{id}")
+    public String deleteMember(@PathVariable Long id) {
+        memberService.deleteMember(id);
+        return "redirect:/admin/members";
+    }
+
+    @PostMapping("/trainers/delete/{id}")
+    public String deleteTrainer(@PathVariable Long id) {
+        trainerService.deleteTrainer(id);
+        return "redirect:/admin/trainers";
+    }
+
+    // === PEMBAYARAN ===
+    @GetMapping("/pembayaran")
+    public String pembayaran(Model model) {
+        var list = pembayaranService.getSemuaPembayaran();
+        double totalPemasukan = list.stream()
+                .filter(p -> p.getStatus() == com.pbo.backend.model.Pembayaran.StatusPembayaran.LUNAS)
+                .mapToDouble(p -> p.getNominal() != null ? p.getNominal() : 0)
+                .sum();
+        long totalLunas = list.stream()
+                .filter(p -> p.getStatus() == com.pbo.backend.model.Pembayaran.StatusPembayaran.LUNAS)
+                .count();
+        model.addAttribute("pembayaranList", list);
+        model.addAttribute("totalPemasukan", (long) totalPemasukan);
+        model.addAttribute("totalLunas", totalLunas);
+        return "admin/pembayaran";
     }
 }

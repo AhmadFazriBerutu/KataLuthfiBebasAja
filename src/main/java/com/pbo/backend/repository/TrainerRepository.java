@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface TrainerRepository extends JpaRepository<Trainer, Long> {
     Optional<Trainer> findByUser(User user);
+    Optional<Trainer> findByUserUsername(String username);
 }

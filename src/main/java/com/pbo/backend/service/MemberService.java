@@ -3,8 +3,10 @@ package com.pbo.backend.service;
 import com.pbo.backend.model.Member;
 import com.pbo.backend.model.User;
 import com.pbo.backend.repository.MemberRepository;
+import com.pbo.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,9 @@ public class MemberService {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
@@ -32,12 +37,18 @@ public class MemberService {
     }
 
     public Member getMemberByUsername(String username) {
-        return memberRepository.findAll().stream()
-                .filter(m -> m.getUser() != null && m.getUser().getUsername().equals(username))
-                .findFirst().orElse(null);
+        return memberRepository.findByUserUsername(username)
+                .orElseThrow(() -> new RuntimeException("Member tidak ditemukan dengan username: " + username));
     }
 
+    @Transactional
     public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Member tidak ditemukan dengan id: " + id));
+        User user = member.getUser();
+        memberRepository.delete(member);
+        if (user != null) {
+            userRepository.delete(user);
+        }
     }
 }

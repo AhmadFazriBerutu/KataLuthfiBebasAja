@@ -20,6 +20,7 @@
       <h1>My Schedule</h1>
       <p>Daftar jadwal sesi PT kamu.</p>
     </div>
+    <a th:href="@{/pt/schedule/add}" class="btn-primary">+ Add Schedule</a>
   </div>
   <div class="table-card">
     <div class="table-header">
@@ -42,8 +43,8 @@
         <td th:text="${schedule.jamMulai}">08:00</td>
         <td th:text="${schedule.jamSelesai}">09:00</td>
         <td>
-                    <span th:class="${schedule.status.name() == 'AVAILABLE'} ? 'badge active-badge' : 'badge inactive-badge'"
-                          th:text="${schedule.status}">AVAILABLE</span>
+          <span th:class="${schedule.status.name() == 'AVAILABLE'} ? 'badge active-badge' : 'badge inactive-badge'"
+                th:text="${schedule.status}">AVAILABLE</span>
         </td>
       </tr>
       <tr th:if="${schedules.empty}">

@@ -12,6 +12,7 @@
         <a th:href="@{/admin/members}">Members</a>
         <a th:href="@{/admin/trainers}" class="active">Trainers</a>
         <a th:href="@{/admin/requests}">PT Requests</a>
+        <a th:href="@{/admin/pembayaran}">Pembayaran</a>
         <a th:href="@{/logout}">Logout</a>
     </div>
 </div>
@@ -39,8 +40,11 @@
                 <p><strong>Phone:</strong> <span th:text="${trainer.telepon}">-</span></p>
             </div>
             <div class="trainer-actions">
-                <a th:href="@{/admin/trainers/delete/{id}(id=${trainer.id})}" class="action-btn delete-btn"
-                   onclick="return confirm('Hapus trainer ini?')">Delete</a>
+                <a th:href="@{/admin/trainers/edit/{id}(id=${trainer.id})}" class="action-btn edit-btn">Edit</a>
+                <form th:action="@{/admin/trainers/delete/{id}(id=${trainer.id})}" method="post" style="display:inline"
+                      onsubmit="return confirm('Hapus trainer ini?')">
+                    <button type="submit" class="action-btn delete-btn">Delete</button>
+                </form>
             </div>
         </div>
     </div>

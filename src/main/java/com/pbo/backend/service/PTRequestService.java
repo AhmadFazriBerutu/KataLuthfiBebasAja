@@ -38,12 +38,19 @@ public class PTRequestService {
     }
 
     public PTRequest approveRequest(Long id, String catatan) {
-        PTRequest request = ptRequestRepository.findById(id).orElseThrow();
+        PTRequest request = ptRequestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Request tidak ditemukan dengan id: " + id));
+
+        // Cek apakah jadwal sudah di-booking oleh request lain
+        Schedule schedule = request.getSchedule();
+        if (schedule.getStatus() == Schedule.Status.BOOKED) {
+            throw new IllegalStateException("Jadwal ini sudah dibooking oleh member lain.");
+        }
+
         request.setStatus(PTRequest.Status.APPROVED);
         request.setCatatanCs(catatan);
 
         // Jadwal otomatis jadi BOOKED
-        Schedule schedule = request.getSchedule();
         schedule.setStatus(Schedule.Status.BOOKED);
         scheduleRepository.save(schedule);
 
@@ -51,7 +58,8 @@ public class PTRequestService {
     }
 
     public PTRequest rejectRequest(Long id, String catatan) {
-        PTRequest request = ptRequestRepository.findById(id).orElseThrow();
+        PTRequest request = ptRequestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Request tidak ditemukan dengan id: " + id));
         request.setStatus(PTRequest.Status.REJECTED);
         request.setCatatanCs(catatan);
         return ptRequestRepository.save(request);

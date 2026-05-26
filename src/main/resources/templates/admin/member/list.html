@@ -12,6 +12,7 @@
         <a th:href="@{/admin/members}" class="active">Members</a>
         <a th:href="@{/admin/trainers}">Trainers</a>
         <a th:href="@{/admin/requests}">PT Requests</a>
+        <a th:href="@{/admin/pembayaran}">Pembayaran</a>
         <a th:href="@{/logout}">Logout</a>
     </div>
 </div>
@@ -30,11 +31,11 @@
         </div>
         <div class="stat-card">
             <h3>Premium Members</h3>
-            <p>-</p>
+            <p th:text="${totalPremium}">0</p>
         </div>
         <div class="stat-card">
             <h3>Basic Members</h3>
-            <p>-</p>
+            <p th:text="${totalBasic}">0</p>
         </div>
     </div>
     <div class="table-card">
@@ -66,8 +67,11 @@
                           th:text="${member.active} ? 'Active' : 'Inactive'">Active</span>
                 </td>
                 <td>
-                    <a th:href="@{/admin/members/delete/{id}(id=${member.id})}" class="action-btn delete-btn"
-                       onclick="return confirm('Hapus member ini?')">Delete</a>
+                    <a th:href="@{/admin/members/edit/{id}(id=${member.id})}" class="action-btn edit-btn">Edit</a>
+                    <form th:action="@{/admin/members/delete/{id}(id=${member.id})}" method="post" style="display:inline"
+                          onsubmit="return confirm('Hapus member ini?')">
+                        <button type="submit" class="action-btn delete-btn">Delete</button>
+                    </form>
                 </td>
             </tr>
             </tbody>

@@ -1,5 +1,6 @@
 package com.pbo.backend.controller;
 
+import com.pbo.backend.model.Schedule;
 import com.pbo.backend.model.Trainer;
 import com.pbo.backend.service.PTRequestService;
 import com.pbo.backend.service.ScheduleService;
@@ -44,5 +45,25 @@ public class PTController {
         Trainer trainer = trainerService.getTrainerByUsername(auth.getName());
         model.addAttribute("requests", ptRequestService.getRequestsByTrainer(trainer));
         return "pt/members";
+    }
+
+    @GetMapping("/list")
+    public String listTrainers(Model model) {
+        model.addAttribute("trainers", trainerService.getAllTrainers());
+        return "pt/list";
+    }
+
+    @GetMapping("/schedule/add")
+    public String addScheduleForm() {
+        return "pt/add";
+    }
+
+    @PostMapping("/schedule/save")
+    public String saveSchedule(@ModelAttribute Schedule schedule, Authentication auth) {
+        Trainer trainer = trainerService.getTrainerByUsername(auth.getName());
+        schedule.setTrainer(trainer);
+        schedule.setStatus(Schedule.Status.AVAILABLE);
+        scheduleService.saveSchedule(schedule);
+        return "redirect:/pt/schedule";
     }
 }

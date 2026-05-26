@@ -3,6 +3,26 @@
 <head>
     <title>Add Member - FitManager</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        /* Desain kotak pembayaran agar menyatu dengan tema gelap modern webmu */
+        .payment-box {
+            display: none; /* Awalnya disembunyikan */
+            background: #1e293b;
+            border: 1px dashed #334155;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        .payment-box h3 {
+            margin-top: 0;
+            color: #f8fafc;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
 </head>
 <body>
 <div class="navbar">
@@ -12,6 +32,7 @@
         <a th:href="@{/admin/members}" class="active">Members</a>
         <a th:href="@{/admin/trainers}">Trainers</a>
         <a th:href="@{/admin/requests}">PT Requests</a>
+        <a th:href="@{/admin/pembayaran}">Pembayaran</a>
         <a th:href="@{/logout}">Logout</a>
     </div>
 </div>
@@ -33,6 +54,10 @@
                 </div>
             </div>
             <form th:action="@{/admin/members/save}" method="post" class="modern-form">
+                <div th:if="${errorUsername}" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.4);color:#f87171;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:0.9rem;">
+                    ⚠️ <span th:text="${errorUsername}"></span>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>Full Name</label>
@@ -57,13 +82,33 @@
                         <input type="password" name="password" placeholder="Password untuk login" required>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label>Membership Plan</label>
-                    <select name="paket">
+                    <select name="paket" id="paketSelect" onchange="checkMembershipPlan()">
                         <option value="BASIC">Basic</option>
                         <option value="PREMIUM">Premium</option>
                     </select>
                 </div>
+
+                <div class="payment-box" id="paymentSection">
+                    <h3>💳 Detail Pembayaran Premium</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Metode Pembayaran</label>
+                            <select name="metodePembayaran">
+                                <option value="Cash">Cash / Tunai</option>
+                                <option value="Transfer Bank">Transfer Bank</option>
+                                <option value="Qris/E-Wallet">QRIS / E-Wallet</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Nominal (Rp)</label>
+                            <input type="number" name="nominal" value="500000" placeholder="Contoh: 500000">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-actions">
                     <a th:href="@{/admin/members}" class="btn-secondary">Cancel</a>
                     <button type="submit" class="btn-primary">Save Member</button>
@@ -90,5 +135,19 @@
         </div>
     </div>
 </section>
+
+<script>
+    function checkMembershipPlan() {
+        var selectPlan = document.getElementById("paketSelect").value;
+        var paymentSection = document.getElementById("paymentSection");
+
+        // Cek kondisi pilihan dropdown paket
+        if (selectPlan === "PREMIUM") {
+            paymentSection.style.display = "block"; // Munculkan box
+        } else {
+            paymentSection.style.display = "none";  // Sembunyikan box
+        }
+    }
+</script>
 </body>
 </html>

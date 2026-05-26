@@ -1,20 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Add Trainer - FitManager</title>
+    <title>Add Schedule - FitManager</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
 <div class="navbar">
     <h2>FitManager Gym</h2>
-
     <div class="nav-menu">
-        <a th:href="@{/}">Home</a>
-        <a th:href="@{/dashboard}">Dashboard</a>
-        <a th:href="@{/members}">Members</a>
-        <a th:href="@{/trainers}" class="active">Trainers</a>
-        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/pt/dashboard}">Dashboard</a>
+        <a th:href="@{/pt/schedule}" class="active">Schedule</a>
+        <a th:href="@{/pt/members}">Members</a>
+        <a th:href="@{/logout}">Logout</a>
     </div>
 </div>
 
@@ -22,81 +20,53 @@
 
     <div class="page-header">
         <div>
-            <h1>Add Trainer</h1>
-            <p>Tambahkan data trainer baru yang tersedia di FitManager Gym.</p>
+            <h1>Add Schedule</h1>
+            <p>Tambahkan jadwal sesi latihan baru untuk member.</p>
         </div>
-
-        <a th:href="@{/trainers}" class="btn-secondary">Back to Trainers</a>
+        <a th:href="@{/pt/schedule}" class="btn-secondary">Back to Schedule</a>
     </div>
 
     <div class="form-layout">
 
         <div class="form-main">
             <div class="form-title">
-                <span class="form-icon">T</span>
+                <span class="form-icon">S</span>
                 <div>
-                    <h2>Trainer Information</h2>
-                    <p>Lengkapi profil trainer untuk ditampilkan pada sistem.</p>
+                    <h2>Schedule Information</h2>
+                    <p>Lengkapi detail jadwal latihan.</p>
                 </div>
             </div>
 
-            <form class="modern-form">
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" name="name" placeholder="Example: Siti Rahma">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="text" name="phone" placeholder="Example: 08123456789">
-                    </div>
-                </div>
+            <form th:action="@{/pt/schedule/save}" method="post" class="modern-form">
 
                 <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" name="email" placeholder="Example: trainer@email.com">
+                    <label>Hari</label>
+                    <select name="hari" required>
+                        <option value="">-- Pilih Hari --</option>
+                        <option value="Senin">Senin</option>
+                        <option value="Selasa">Selasa</option>
+                        <option value="Rabu">Rabu</option>
+                        <option value="Kamis">Kamis</option>
+                        <option value="Jumat">Jumat</option>
+                        <option value="Sabtu">Sabtu</option>
+                        <option value="Minggu">Minggu</option>
+                    </select>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Specialization</label>
-
-                        <div class="custom-select">
-                            <button type="button" class="select-trigger">
-                                <span class="select-text">Select specialization</span>
-                                <span class="select-arrow">⌄</span>
-                            </button>
-
-                            <input type="hidden" name="specialization">
-
-                            <div class="select-options">
-                                <div class="select-option" data-value="Weight Training">Weight Training</div>
-                                <div class="select-option" data-value="Cardio Training">Cardio Training</div>
-                                <div class="select-option" data-value="Yoga & Flexibility">Yoga & Flexibility</div>
-                                <div class="select-option" data-value="Personal Training">Personal Training</div>
-                            </div>
-                        </div>
+                        <label>Jam Mulai</label>
+                        <input type="time" name="jamMulai" required>
                     </div>
-
                     <div class="form-group">
-                        <label>Status</label>
-                        <select name="status">
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Inactive</option>
-                        </select>
+                        <label>Jam Selesai</label>
+                        <input type="time" name="jamSelesai" required>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Schedule</label>
-                    <input type="text" name="schedule" placeholder="Example: Monday - Friday">
                 </div>
 
                 <div class="form-actions">
-                    <a th:href="@{/trainers}" class="btn-secondary">Cancel</a>
-                    <button type="button" class="btn-primary">Save Trainer</button>
+                    <a th:href="@{/pt/schedule}" class="btn-secondary">Cancel</a>
+                    <button type="submit" class="btn-primary">Save Schedule</button>
                 </div>
 
             </form>
@@ -104,29 +74,14 @@
 
         <div class="form-side">
             <div class="side-card">
-                <h3>Trainer Categories</h3>
-                <p>Gunakan kategori agar trainer mudah dicari berdasarkan keahlian.</p>
-
-                <div class="plan-item">
-                    <div>
-                        <h4>Strength</h4>
-                        <span>Weight and muscle training</span>
-                    </div>
-                    <strong>Gym</strong>
-                </div>
-
+                <h3>Info Jadwal</h3>
+                <p>Jadwal yang ditambahkan akan langsung tersedia untuk di-booking oleh member Premium.</p>
                 <div class="plan-item highlight">
-                    <div>
-                        <h4>Personal</h4>
-                        <span>One-on-one training session</span>
-                    </div>
-                    <strong>Premium</strong>
+                    <div><h4>AVAILABLE</h4><span>Bisa di-booking member</span></div>
                 </div>
-            </div>
-
-            <div class="side-card small">
-                <h3>Note</h3>
-                <p>Pastikan jadwal trainer jelas agar memudahkan pengelolaan layanan gym.</p>
+                <div class="plan-item">
+                    <div><h4>BOOKED</h4><span>Sudah ada member</span></div>
+                </div>
             </div>
         </div>
 
@@ -134,6 +89,5 @@
 
 </section>
 
-<script th:src="@{/js/custom-select.js}"></script>
 </body>
 </html>

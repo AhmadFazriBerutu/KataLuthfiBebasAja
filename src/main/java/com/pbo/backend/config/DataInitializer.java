@@ -124,7 +124,7 @@ public class DataInitializer {
             }
 
             System.out.println("=== Data dummy berhasil dibuat! ===");
-            System.out.println("Login: admin/admin123 | budi/budi123 | sari/sari123 | andi/andi123 | siti/siti123");
+            System.out.println("Gunakan akun default untuk login (lihat konfigurasi DataInitializer).");
         };
     }
 }

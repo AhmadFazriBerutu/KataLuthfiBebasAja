@@ -29,6 +29,15 @@ public class MemberController {
     @Autowired
     private PTRequestService ptRequestService;
 
+    @GetMapping("/list")
+    public String list(Model model) {
+        var members = memberService.getAllMembers();
+        model.addAttribute("members", members);
+        model.addAttribute("totalActive", members.stream().filter(m -> m.isActive()).count());
+        model.addAttribute("totalInactive", members.stream().filter(m -> !m.isActive()).count());
+        return "member/list";
+    }
+
     @GetMapping("/dashboard")
     public String dashboard(Model model, Authentication auth) {
         Member member = memberService.getMemberByUsername(auth.getName());
@@ -81,5 +90,26 @@ public class MemberController {
         Member member = memberService.getMemberByUsername(auth.getName());
         model.addAttribute("requests", ptRequestService.getRequestsByMember(member));
         return "member/my-requests";
+    }
+
+    // === FITUR BARU: EDIT PROFIL MEMBER ===
+    @GetMapping("/profile")
+    public String editProfileForm(Model model, Authentication auth) {
+        Member member = memberService.getMemberByUsername(auth.getName());
+        model.addAttribute("member", member);
+        return "member/profile";
+    }
+
+    @PostMapping("/profile/update")
+    public String updateProfile(@ModelAttribute Member form, Authentication auth) {
+        Member member = memberService.getMemberByUsername(auth.getName());
+
+        // Update data profil dasar dari input form
+        member.setNama(form.getNama());
+        member.setEmail(form.getEmail());
+        member.setTelepon(form.getTelepon());
+
+        memberService.saveMember(member);
+        return "redirect:/member/profile?success";
     }
 }
