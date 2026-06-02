@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Kunjungan Harian - FitManager Gym</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="navbar">
+  <h2>FitManager Gym</h2>
+  <div class="nav-menu">
+    <a th:href="@{/admin/dashboard}">Dashboard</a>
+    <a th:href="@{/admin/members}">Members</a>
+    <a th:href="@{/admin/trainers}">Trainers</a>
+    <a th:href="@{/admin/requests}">PT Requests</a>
+    <a th:href="@{/admin/pembayaran}">Pembayaran</a>
+    <a th:href="@{/admin/kunjungan}" class="active">Kunjungan</a>
+    <a th:href="@{/logout}">Logout</a>
+  </div>
+</div>
+
+<section class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Kunjungan Harian (Walk-in)</h1>
+      <p>Total kunjungan hari ini: <strong th:text="${totalHariIni}">0</strong> orang &nbsp;·&nbsp; Tarif: <strong>Rp 50.000</strong></p>
+    </div>
+  </div>
+
+  <div class="dashboard-panel" style="margin-bottom: 2rem;">
+    <h3>Catat Pengunjung Baru</h3>
+    <form th:action="@{/admin/kunjungan/catat}" method="post"
+          style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:1rem; align-items:center;">
+      <input type="text" name="namaKunjungan" placeholder="Nama pengunjung" required
+             style="padding:0.5rem; border-radius:6px; border:1px solid #ccc; min-width:220px;">
+      <input type="text" name="keterangan" placeholder="Keterangan (opsional)"
+             style="padding:0.5rem; border-radius:6px; border:1px solid #ccc; min-width:200px;">
+      <button type="submit" class="btn-primary">+ Catat Masuk</button>
+    </form>
+  </div>
+
+  <div style="margin-bottom: 1rem; display:flex; align-items:center; gap:1rem;">
+    <form th:action="@{/admin/kunjungan}" method="get" style="display:flex; gap:0.5rem; align-items:center;">
+      <label>Filter Tanggal:</label>
+      <input type="date" name="tanggal" th:value="${tanggalFilter}"
+             style="padding:0.5rem; border-radius:6px; border:1px solid #ccc;">
+      <button type="submit" class="btn-primary" style="padding:0.5rem 1rem;">Tampilkan</button>
+    </form>
+  </div>
+
+  <div class="dashboard-panel">
+    <table style="width:100%; border-collapse:collapse;">
+      <thead>
+      <tr style="background:rgba(255,255,255,0.12); color:#f8fafc;">
+        <th style="padding:0.75rem; text-align:left;">#</th>
+        <th style="padding:0.75rem; text-align:left;">Nama Pengunjung</th>
+        <th style="padding:0.75rem; text-align:left;">Tarif</th>
+        <th style="padding:0.75rem; text-align:left;">Tanggal</th>
+        <th style="padding:0.75rem; text-align:left;">Jam Masuk</th>
+        <th style="padding:0.75rem; text-align:left;">Keterangan</th>
+        <th style="padding:0.75rem; text-align:left;">Aksi</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:if="${#lists.isEmpty(kunjunganList)}">
+        <td colspan="7" style="padding:1rem; text-align:center; color:#999;">
+          Belum ada kunjungan pada tanggal ini.
+        </td>
+      </tr>
+      <tr th:each="k, i : ${kunjunganList}" style="border-bottom:1px solid #eee;">
+        <td style="padding:0.75rem;" th:text="${i.count}"></td>
+        <td style="padding:0.75rem;" th:text="${k.namaKunjungan}"></td>
+        <td style="padding:0.75rem;">Rp 50.000</td>
+        <td style="padding:0.75rem;" th:text="${k.tanggal}"></td>
+        <td style="padding:0.75rem;" th:text="${#temporals.format(k.jamMasuk, 'HH:mm')}"></td>
+        <td style="padding:0.75rem;" th:text="${k.keterangan != null ? k.keterangan : '-'}"></td>
+        <td style="padding:0.75rem;">
+          <form th:action="@{/admin/kunjungan/hapus/{id}(id=${k.id})}" method="post"
+                onsubmit="return confirm('Hapus data kunjungan ini?')">
+            <button type="submit"
+                    style="background:#e74c3c; color:white; border:none; padding:0.4rem 0.8rem; border-radius:5px; cursor:pointer;">
+              Hapus
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</body>
+</html>

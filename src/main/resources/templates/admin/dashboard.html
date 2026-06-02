@@ -3,6 +3,20 @@
 <head>
     <title>Dashboard - FitManager Gym</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .dashboard-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 24px;
+            margin-bottom: 34px;
+        }
+        @media (max-width: 1200px) {
+            .dashboard-grid-5 { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .dashboard-grid-5 { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
 <body>
 <div class="navbar">
@@ -13,6 +27,7 @@
         <a th:href="@{/admin/trainers}">Trainers</a>
         <a th:href="@{/admin/requests}">PT Requests</a>
         <a th:href="@{/admin/pembayaran}">Pembayaran</a>
+        <a th:href="@{/admin/kunjungan}">Kunjungan</a>
         <a th:href="@{/logout}">Logout</a>
     </div>
 </div>
@@ -24,7 +39,7 @@
         </div>
         <a th:href="@{/admin/members/add}" class="btn-primary">+ Add Member</a>
     </div>
-    <div class="dashboard-grid">
+    <div class="dashboard-grid-5">
         <div class="dashboard-card">
             <span class="dashboard-label">Total Members</span>
             <h2 th:text="${totalMembers}">0</h2>
@@ -45,6 +60,11 @@
             <h2>2</h2>
             <p>Basic &amp; Premium</p>
         </div>
+        <div class="dashboard-card">
+            <span class="dashboard-label">Kunjungan Hari Ini</span>
+            <h2 th:text="${kunjunganHariIni}">0</h2>
+            <p>Pengunjung masuk hari ini</p>
+        </div>
     </div>
     <div class="dashboard-content">
         <div class="dashboard-panel">
@@ -63,6 +83,10 @@
                 <a th:href="@{/admin/requests}" class="quick-action">
                     <strong>Manage PT Requests</strong>
                     <span>Approve or reject pending requests</span>
+                </a>
+                <a th:href="@{/admin/kunjungan}" class="quick-action">
+                    <strong>Catat Kunjungan</strong>
+                    <span>Catat pengunjung walk-in harian</span>
                 </a>
             </div>
         </div>
