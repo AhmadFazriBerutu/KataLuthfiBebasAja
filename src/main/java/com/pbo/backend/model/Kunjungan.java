@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 @Setter
@@ -19,12 +20,18 @@ public class Kunjungan {
     private String namaKunjungan;
     private Double tarifHarian;
     private LocalDate tanggal;
+
+    @Column(columnDefinition = "TIME(0)")
     private LocalTime jamMasuk;
+
     private String keterangan;
 
     @PrePersist
     protected void onCreate() {
         if (tanggal == null) tanggal = LocalDate.now();
-        if (jamMasuk == null) jamMasuk = LocalTime.now();
+
+        if (jamMasuk == null) {
+            jamMasuk = LocalTime.now().truncatedTo(ChronoUnit.SECONDS);
+        }
     }
 }
