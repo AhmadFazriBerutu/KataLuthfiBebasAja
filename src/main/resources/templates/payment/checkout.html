@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkout - FitManager</title>
+    <script type="text/javascript"
+            src="https://app.sandbox.midtrans.com/snap/snap.js"
+            th:data-client-key="${clientKey}"></script>
+</head>
+<body>
+<div style="text-align: center; margin-top: 50px;">
+    <h2>Pembayaran Sesi PT</h2>
+    <p>Order ID: <span th:text="${orderId}"></span></p>
+    <p>Total: Rp 150.000</p>
+    <button id="pay-button">Bayar Sekarang</button>
+</div>
+
+<script th:inline="javascript">
+    const snapToken = [[${snapToken}]];
+    document.getElementById('pay-button').onclick = function() {
+        window.snap.pay(snapToken, {
+            onSuccess: (res) => { alert("Sukses!"); window.location.href = "/pt/dashboard"; },
+            onPending: (res) => { alert("Menunggu..."); },
+            onError: (res) => { alert("Gagal!"); }
+        });
+    };
+</script>
+</body>
+</html>

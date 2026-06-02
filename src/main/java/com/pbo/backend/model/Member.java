@@ -3,7 +3,7 @@ package com.pbo.backend.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.List; // 1. Tambahkan import ini di atas jika belum ada
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,9 +24,13 @@ public class Member extends Person {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // 2. TAMBAHKAN KODE INI DI SINI
+    // Relasi ke Pembayaran
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Pembayaran> pembayaranList;
+
+    // Relasi ke PTRequest (Ditambahkan untuk memperbaiki error)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<PTRequest> ptRequests;
 
     public enum Paket {
         BASIC, PREMIUM

@@ -26,11 +26,23 @@ public class ScheduleService {
         return scheduleRepository.save(schedule);
     }
 
-    public void deleteSchedule(Long id) {
-        scheduleRepository.deleteById(id);
-    }
-
     public Schedule getScheduleById(Long id) {
         return scheduleRepository.findById(id).orElse(null);
+    }
+
+    /**
+     * PERBAIKAN: Menghapus jadwal dengan validasi status.
+     * Hanya jadwal berstatus AVAILABLE yang boleh dihapus oleh Trainer.
+     */
+    public void deleteSchedule(Long id) {
+        Schedule schedule = scheduleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Jadwal tidak ditemukan dengan ID: " + id));
+
+        // Memeriksa status menggunakan enum Schedule.Status yang ada di modelmu
+        if (schedule.getStatus() != Schedule.Status.AVAILABLE) {
+            throw new IllegalStateException("Jadwal tidak dapat dihapus karena sudah dipesan atau tidak aktif!");
+        }
+
+        scheduleRepository.delete(schedule);
     }
 }

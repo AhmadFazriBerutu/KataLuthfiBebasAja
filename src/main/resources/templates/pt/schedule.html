@@ -22,6 +22,14 @@
     </div>
     <a th:href="@{/pt/schedule/add}" class="btn-primary">+ Add Schedule</a>
   </div>
+
+  <div th:if="${successMessage}" style="background: rgba(34,197,94,0.15); color: #22c55e; padding: 14px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(34,197,94,0.2); font-size: 0.95rem;">
+    ✅ <span th:text="${successMessage}"></span>
+  </div>
+  <div th:if="${errorMessage}" style="background: rgba(239,68,68,0.15); color: #ef4444; padding: 14px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(239,68,68,0.2); font-size: 0.95rem;">
+    ❌ <span th:text="${errorMessage}"></span>
+  </div>
+
   <div class="table-card">
     <div class="table-header">
       <h2>Schedule List</h2>
@@ -34,7 +42,7 @@
         <th>Jam Mulai</th>
         <th>Jam Selesai</th>
         <th>Status</th>
-      </tr>
+        <th style="text-align: center;">Aksi</th> </tr>
       </thead>
       <tbody>
       <tr th:each="schedule, stat : ${schedules}">
@@ -46,13 +54,91 @@
           <span th:class="${schedule.status.name() == 'AVAILABLE'} ? 'badge active-badge' : 'badge inactive-badge'"
                 th:text="${schedule.status}">AVAILABLE</span>
         </td>
+        <td style="text-align: center;">
+
+          <form th:if="${schedule.status.name() == 'AVAILABLE'}"
+                th:action="@{/pt/schedule/delete/{id}(id=${schedule.id})}"
+                method="post"
+                style="margin: 0; display: inline-block;">
+            <button type="button"
+                    th:data-hari="${schedule.hari}"
+                    th:data-jam="${schedule.jamMulai}"
+                    onclick="bukaModalHapus(this);"
+                    style="background: #ef4444; color: #ffffff; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.85rem; transition: background 0.2s;">
+              Hapus
+            </button>
+          </form>
+
+          <span th:if="${schedule.status.name() != 'AVAILABLE'}" style="color: #64748b; font-size: 0.85rem; font-style: italic;">
+            No Action
+          </span>
+        </td>
       </tr>
       <tr th:if="${schedules.empty}">
-        <td colspan="5" style="text-align:center;color:#94a3b8;padding:30px">Tidak ada jadwal.</td>
-      </tr>
+        <td colspan="6" style="text-align:center;color:#94a3b8;padding:30px">Tidak ada jadwal.</td> </tr>
       </tbody>
     </table>
   </div>
 </section>
+
+<div id="customConfirmModal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(4px); align-items: center; justify-content: center;">
+  <div style="background: #1e293b; border: 1px solid #334155; width: 100%; max-width: 400px; padding: 24px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); text-align: center; font-family: inherit;">
+    <div style="background: rgba(239,68,68,0.1); color: #ef4444; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px auto; font-size: 1.5rem;">
+      ⚠️
+    </div>
+    <h3 style="color: #f8fafc; margin-bottom: 8px; font-size: 1.2rem; font-weight: 600;">Konfirmasi Hapus</h3>
+    <p id="modalMessage" style="color: #94a3b8; font-size: 0.95rem; line-height: 1.5; margin-bottom: 24px;">Apakah kamu yakin ingin menghapus jadwal ini?</p>
+    <div style="display: flex; gap: 12px; justify-content: center;">
+      <button id="btnCancelDelete" style="background: #334155; color: #94a3b8; border: 1px solid #475569; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; flex: 1; transition: background 0.2s;">
+        Batal
+      </button>
+      <button id="btnConfirmDelete" style="background: #ef4444; color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem; flex: 1; transition: background 0.2s;">
+        Ya, Hapus
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let formYangAkanDihapus = null;
+
+  function bukaModalHapus(buttonElement) {
+      // Menangkap form element induk dari button
+      formYangAkanDihapus = buttonElement.closest('form');
+
+      // Membaca data attributes
+      let hari = buttonElement.getAttribute('data-hari');
+      let jam = buttonElement.getAttribute('data-jam');
+
+      // Menyuntikkan pesan dinamis ke dalam modal kartu
+      document.getElementById('modalMessage').innerText = "Apakah kamu yakin ingin menghapus jadwal hari " + hari + " jam " + jam + "?";
+
+      // Menampilkan modal ke tengah layar
+      document.getElementById('customConfirmModal').style.display = 'flex';
+  }
+
+  // Aksi tombol Batal diklik
+  document.getElementById('btnCancelDelete').addEventListener('click', function() {
+      document.getElementById('customConfirmModal').style.display = 'none';
+      formYangAkanDihapus = null;
+  });
+
+  // Aksi tombol Ya, Hapus diklik
+  document.getElementById('btnConfirmDelete').addEventListener('click', function() {
+      if (formYangAkanDihapus) {
+          formYangAkanDihapus.submit();
+      }
+  });
+
+  // Menutup modal otomatis jika user klik di luar kotak area modal luar
+  window.addEventListener('click', function(event) {
+      let modal = document.getElementById('customConfirmModal');
+      if (event.target === modal) {
+          modal.style.display = 'none';
+          formYangAkanDihapus = null;
+      }
+  });
+</script>
+
 </body>
 </html>

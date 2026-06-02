@@ -15,7 +15,8 @@ public class Pembayaran {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    // Diubah menjadi ManyToOne agar member bisa melakukan pembayaran berkali-kali di masa depan
+    @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
@@ -31,6 +32,13 @@ public class Pembayaran {
 
     private LocalDateTime tanggal;
 
+    // Tambahan field untuk tracking integrasi payment gateway
+    @Column(unique = true)
+    private String orderId;
+
+    @Column(length = 500)
+    private String snapToken;
+
     public enum MetodePembayaran {
         CASH, TRANSFER_BANK, QRIS_EWALLET
     }
@@ -42,6 +50,8 @@ public class Pembayaran {
     @PrePersist
     protected void onCreate() {
         tanggal = LocalDateTime.now();
-        if (status == null) status = StatusPembayaran.LUNAS;
+        if (status == null) {
+            status = StatusPembayaran.PENDING;
+        }
     }
 }

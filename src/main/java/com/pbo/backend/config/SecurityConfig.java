@@ -27,6 +27,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/login", "/logout", "/h2-console/**").permitAll()
+
+                        // 🌟 BARIS BARU: Mengizinkan akses ke endpoint payment Midtrans tanpa login
+                        .requestMatchers("/payment/**").permitAll()
+
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/member/**").hasRole("MEMBER")
                         .requestMatchers("/pt/**").hasRole("PT")

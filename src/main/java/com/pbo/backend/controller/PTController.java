@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/pt")
@@ -64,6 +65,25 @@ public class PTController {
         schedule.setTrainer(trainer);
         schedule.setStatus(Schedule.Status.AVAILABLE);
         scheduleService.saveSchedule(schedule);
+        return "redirect:/pt/schedule";
+    }
+
+    // UPDATE: Endpoint dengan penanganan Exception melanggar Foreign Key (DataIntegrityViolationException)
+    @PostMapping("/schedule/delete/{id}")
+    public String deleteSchedule(@PathVariable Long id, RedirectAttributes redirectAttrs) {
+        try {
+            scheduleService.deleteSchedule(id);
+            redirectAttrs.addFlashAttribute("successMessage", "Jadwal berhasil dihapus.");
+        } catch (IllegalStateException | IllegalArgumentException e) {
+            // Menangkap error logika bisnis dari service (misal status sudah dipesan)
+            redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            // MENANGKAP ERROR FOREIGN KEY: Mencegah crash jika jadwal terikat ke tabel PT_REQUESTS
+            redirectAttrs.addFlashAttribute("errorMessage", "Jadwal gagal dihapus karena rekam datanya sedang digunakan dalam riwayat transaksi/permintaan member!");
+        } catch (Exception e) {
+            // Menangkap error umum lainnya agar sistem tetap aman
+            redirectAttrs.addFlashAttribute("errorMessage", "Terjadi kesalahan sistem saat mencoba menghapus jadwal.");
+        }
         return "redirect:/pt/schedule";
     }
 }

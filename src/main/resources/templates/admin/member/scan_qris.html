@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Selesaikan Pembayaran - FitManager</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+          data-client-key="SB-Mid-client-DUMMYKEY123"></script>
+</head>
+<body>
+<div class="navbar">
+  <h2>FitManager Gym</h2>
+  <div class="nav-menu">
+    <a th:href="@{/admin/dashboard}">Dashboard</a>
+    <a th:href="@{/admin/members}" class="active">Members</a>
+    <a th:href="@{/admin/trainers}">Trainers</a>
+    <a th:href="@{/admin/requests}">PT Requests</a>
+    <a th:href="@{/admin/pembayaran}">Pembayaran</a>
+    <a th:href="@{/logout}">Logout</a>
+  </div>
+</div>
+
+<section class="page-container" style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
+  <div class="table-card" style="max-width: 500px; width:100%; padding: 40px; border-radius:12px; background: #0f172a; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);">
+    <div style="text-align:center; margin-bottom: 25px;">
+      <div style="font-size: 3rem; margin-bottom: 10px;">📱</div>
+      <h1 style="color: #f8fafc; font-size: 1.5rem; font-weight: 700;">Terminal QRIS Kasir</h1>
+      <p style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">Klik tombol di bawah untuk memproses status pembayaran member.</p>
+    </div>
+
+    <div style="background: rgba(241,245,249,0.03); padding: 20px; border-radius: 8px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05)">
+      <p style="margin-bottom:8px; color: #cbd5e1;"><strong>Nama Member:</strong> <span th:text="${member.nama}" style="color: #f1f5f9;"></span></p>
+      <p style="margin-bottom:8px; color: #cbd5e1;"><strong>Nomor Invoice:</strong> <span th:text="${pembayaran.orderId}" style="color:#eab308; font-weight:600;"></span></p>
+      <p style="margin-bottom:0; color: #cbd5e1;"><strong>Total Tagihan:</strong> <span th:text="'Rp ' + ${#numbers.formatInteger(pembayaran.nominal != null ? pembayaran.nominal : 0, 0, 'COMMA')}" style="color:#22c55e; font-weight:600;"></span></p>
+    </div>
+
+    <button id="pay-button" style="width: 100%; padding: 14px; font-weight: bold; background:#22c55e; color:#fff; border:none; cursor:pointer; border-radius:6px; font-size:1rem; transition: background 0.2s;">
+      Simulasikan Pembayaran Sukses
+    </button>
+
+    <a th:href="@{/admin/members}" style="display: block; text-align:center; margin-top: 20px; color: #64748b; text-decoration:none; font-size: 0.9rem;">
+      ← Batalkan & Kembali ke List
+    </a>
+  </div>
+</section>
+
+<script th:inline="javascript">
+  const payButton = document.getElementById('pay-button');
+  const snapToken = /*[[${pembayaran.snapToken}]]*/ '';
+
+  payButton.addEventListener('click', function () {
+      // Ambil orderId dari objek pembayaran Thymeleaf
+      const orderId = /*[[${pembayaran.orderId}]]*/ '';
+
+      // JIKA MASIH MODE TESTING / DUMMY TOKEN
+      if (!snapToken || snapToken === '' || snapToken.startsWith('DUMMY_TOKEN_')) {
+          alert('Mengaktifkan mode simulasi! Pembayaran berhasil diproses.');
+          // Alihkan ke endpoint sukses di AdminController agar status database berubah jadi LUNAS
+          window.location.href = "/admin/pembayaran/sukses/" + orderId;
+          return;
+      }
+
+      // JALUR ASLI MIDTRANS (Dipakai jika string token didapat dari API asli)
+      window.snap.pay(snapToken, {
+          onSuccess: function(result){
+              alert("Pembayaran Terkonfirmasi Lunas!");
+              window.location.href = "/admin/pembayaran/sukses/" + orderId;
+          },
+          onPending: function(result){
+              alert("Menunggu transaksi selesai discan.");
+              window.location.href = "/admin/members";
+          },
+          onError: function(result){
+              alert("Transaksi gagal diproses oleh sistem.");
+          }
+      });
+  });
+</script>
+</body>
+</html>
